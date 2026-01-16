@@ -92,10 +92,10 @@
     },
     "resources": {
       "css": [
-      {
-        "uri": "css/style.css"
-      }
-    ]
+        {
+          "uri": "css/style.css"
+        }
+      ]
     },
     "routing": {
       "config": {},
@@ -156,6 +156,20 @@
                         "placement": "Before"
                       },
                       "text": "History"
+                    }
+                  }
+                }
+              },
+              "content": {
+                "body": {
+                  "sections": {
+                    "AuditHistory": {
+                      "template": "project1.ext.fragment.AuditHistory",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneratedFacet1"
+                      },
+                      "title": "Customer Audit History"
                     }
                   }
                 }

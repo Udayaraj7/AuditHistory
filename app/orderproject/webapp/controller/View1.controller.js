@@ -5,7 +5,9 @@ sap.ui.define([
     "sap/m/Input",
     "sap/m/VBox",
     "sap/m/Button",
+    "sap/m/Label",
     "sap/m/MessageToast"
+
 ], function (
     Controller,
     JSONModel,
@@ -13,71 +15,86 @@ sap.ui.define([
     Input,
     VBox,
     Button,
+    Label,
     MessageToast
+
 ) {
     "use strict";
 
     return Controller.extend("orderproject.controller.View1", {
 
-        /* ===================== INIT ===================== */
         onInit: function () {
             const oWizardModel = new JSONModel({
                 customer: {},
                 order: {},
                 payment: {},
                 selectedCustomerId: null,
-                selectedCustomerName:null,
-                selectedCustomerEmail:null,
+                selectedCustomerName: null,
+                selectedCustomerEmail: null,
                 showOrderButton: false,
                 showPaymentButton: false,
-                showReviewButton:false,
-                showReview:false
+                showReviewButton: false,
+                showReview: false
             });
 
             this.getView().setModel(oWizardModel, "wizard");
         },
 
-        /* ===================== STEP 1: CUSTOMER ===================== */
+
 
         onCreateCustomerPress: function () {
 
-            if (!this._oCustomerDialog) {
-                this._oCustomerDialog = new Dialog({
-                    title: "Create Customer",
-                    contentWidth: "400px",
-                    content: new VBox({
-                        items: [
-                            new Input({ placeholder: "Customer Name", value: "{dialog>/customerName}" }),
-                            new Input({ placeholder: "Email", value: "{dialog>/email}" }),
-                            new Input({ placeholder: "Phone Number", value: "{dialog>/phoneNumber}" }),
-                            new Input({ placeholder: "Address", value: "{dialog>/address}" })
-                        ]
-                    }),
-                    beginButton: new Button({
-                        text: "Submit",
-                        type: "Emphasized",
-                        press: this.onSubmitCustomer.bind(this)
-                    }),
-                    endButton: new Button({
-                        text: "Cancel",
-                        press: () => this._oCustomerDialog.close()
-                    })
-                });
+    if (!this._oCustomerDialog) {
+        this._oCustomerDialog = new Dialog({
+            title: "Create Customer",
+            contentWidth: "420px",
+            content: new sap.ui.layout.form.SimpleForm({
+                editable: true,
+                layout: "ResponsiveGridLayout",
+                content: [
+                    new Label({ text: "Customer Name" }),
+                    new Input({ value: "{dialog>/customerName}" }),
 
-                this._oCustomerDialog.setModel(new JSONModel({}), "dialog");
-                this.getView().addDependent(this._oCustomerDialog);
-            }
+                    new Label({ text: "Email" }),
+                    new Input({ value: "{dialog>/email}", type: "Email" }),
 
-            this._oCustomerDialog.open();
-        },
+                    new Label({ text: "Phone Number" }),
+                    new Input({ value: "{dialog>/phoneNumber}" }),
+
+                    new Label({ text: "Address" }),
+                    new Input({ value: "{dialog>/address}" })
+                ]
+            }),
+            beginButton: new Button({
+                text: "Submit",
+                type: "Emphasized",
+                press: this.onSubmitCustomer.bind(this)
+            }),
+            endButton: new Button({
+                text: "Cancel",
+                press: () => this._oCustomerDialog.close()
+            })
+        });
+
+        this._oCustomerDialog.setModel(new JSONModel({}), "dialog");
+        this.getView().addDependent(this._oCustomerDialog);
+    }
+
+    this._oCustomerDialog.open();
+},
 
         onSubmitCustomer: async function () {
             const oDialogModel = this._oCustomerDialog.getModel("dialog");
             const oData = oDialogModel.getData();
             const oModel = this.getView().getModel();
 
-            if (!oData.customerName) {
-                MessageToast.show("Customer Name is required");
+            if (
+                !oData.customerName ||
+                !oData.email ||
+                !oData.phoneNumber ||
+                !oData.address
+            ) {
+                MessageToast.show("All customer fields are required");
                 return;
             }
 
@@ -112,7 +129,7 @@ sap.ui.define([
 
             const sCustomerId = oItem.getBindingContext().getProperty("customerId");
             const sCustomerName = oItem.getBindingContext().getProperty("customerName");
-            const sCustomeremail= oItem.getBindingContext().getProperty("email");
+            const sCustomeremail = oItem.getBindingContext().getProperty("email");
 
             oWizard.setProperty("/selectedCustomerId", sCustomerId);
             oWizard.setProperty("/selectedCustomerName", sCustomerName);
@@ -127,7 +144,7 @@ sap.ui.define([
 
             const oItem = oEvent.getParameter("listItem");
 
-            // 🔥 If same item is already selected → deselect
+            //  deselect
             if (oItem && oItem.getSelected()) {
                 oTable.removeSelections(true);
 
@@ -159,70 +176,74 @@ sap.ui.define([
 
         /* ===================== STEP 2: ORDER ===================== */
 
-onOrderFieldChange: function (oEvent) {
-    const oWizardModel = this.getView().getModel("wizard");
+        onOrderFieldChange: function (oEvent) {
+            const oWizardModel = this.getView().getModel("wizard");
 
-    // 🔑 Get live value directly from event
-    const sValue = oEvent.getParameter("value");
+            
+            const sValue = oEvent.getParameter("value");
 
-    // Get order object
-    const oOrder = oWizardModel.getProperty("/order") || {};
+          
+            const oOrder = oWizardModel.getProperty("/order") || {};
 
-    // --- Date validation ---
-    const bDateFilled =
-        oOrder.orderDate !== null &&
-        oOrder.orderDate !== undefined &&
-        oOrder.orderDate !== "";
+            
+            const bDateFilled =
+                oOrder.orderDate !== null &&
+                oOrder.orderDate !== undefined &&
+                oOrder.orderDate !== "";
 
-    // --- Amount validation (from event!) ---
-    const bAmountFilled =
-        sValue !== "" &&
-        !isNaN(sValue) &&
-        Number(sValue) > 0;
-
-    const bFilled = bDateFilled && bAmountFilled;
-
-    oWizardModel.setProperty("/showPaymentButton", bFilled);
-
-    console.log("LIVE CHECK:", {
-        date: oOrder.orderDate,
-        liveAmount: sValue,
-        showButton: bFilled
-    });
-},
+          
+            const bAmountFilled =
+                sValue !== "" &&
+                !isNaN(sValue) &&
+                Number(sValue) > 0;
 
 
-       onPaymentFieldChange: function (oEvent) {
-    const oWizardModel = this.getView().getModel("wizard");
+            // const bAmountFilled =
+            //     oOrder.orderAmount !== "" &&
+            //     !isNaN(oOrder.orderAmount) &&
+            //     Number(oOrder.orderAmount) > 0;
 
-    
-    const sLiveValue = oEvent.getParameter("value");
-       
+            
 
-    const oPayment = oWizardModel.getProperty("/payment") || {};
+            const bFilled = bDateFilled && bAmountFilled;
 
-    // --- Payment Date validation ---
-    const bDateFilled =
-        oPayment.paymentDate !== null &&
-        oPayment.paymentDate !== undefined &&
-        oPayment.paymentDate !== "";
+            oWizardModel.setProperty("/showPaymentButton", bFilled);
 
-    // --- Amount validation ---
-    const bAmountFilled =
-        sLiveValue !== undefined
-            ? !isNaN(sLiveValue) && Number(sLiveValue) > 0   // liveChange
-            : !isNaN(oPayment.amount) && Number(oPayment.amount) > 0; // change event
+            console.log("LIVE CHECK:", {
+                date: oOrder.orderDate,
+                liveAmount: sValue ??oOrder.orderAmount,
+                showButton: bFilled
+            });
+        },
 
-    const bValid = bDateFilled && bAmountFilled;
 
-    oWizardModel.setProperty("/showReviewButton", bValid);
+        onPaymentFieldChange: function (oEvent) {
+            const oWizardModel = this.getView().getModel("wizard");
 
-    console.log("PAYMENT LIVE CHECK:", {
-        date: oPayment.paymentDate,
-        amount: sLiveValue ?? oPayment.amount,
-        showReview: bValid
-    });
-},
+            // const sLiveValue = oEvent.getParameter("value");
+
+            const oPayment = oWizardModel.getProperty("/payment") || {};
+
+
+            const bDateFilled =
+                oPayment.paymentDate !== null &&
+                oPayment.paymentDate !== undefined &&
+                oPayment.paymentDate !== "";
+
+
+            const bAmountFilled = !isNaN(oPayment.amount) && Number(oPayment.amount) > 0;
+
+
+            const bValid = bDateFilled && bAmountFilled;
+
+            oWizardModel.setProperty("/showReviewButton", bValid);
+
+            console.log("PAYMENT LIVE CHECK:", {
+                date: oPayment.paymentDate,
+                amount: oPayment.amount,
+                showReview: bValid
+            });
+        },
 
 
 
@@ -241,11 +262,11 @@ onOrderFieldChange: function (oEvent) {
             });
         },
 
-onShowReview: function () {
-    this.byId("customerWizard").nextStep();
-}
+        onShowReview: function () {
+            this.byId("customerWizard").nextStep();
+        }
 
-,
+        ,
 
         /* ===================== STEP 4: review ===================== */
 
@@ -282,8 +303,8 @@ onShowReview: function () {
 
             this._resetWizard();
         },
-        onCancelWizard:async function () {
-                this._resetWizard();
+        onCancelWizard: async function () {
+            this._resetWizard();
         },
 
 
@@ -302,8 +323,8 @@ onShowReview: function () {
                 selectedCustomerId: null,
                 showOrderButton: false,
                 showPaymentButton: false,
-                showReviewButton:false,
-                showReview:false
+                showReviewButton: false,
+                showReview: false
             }, true); // true = merge = false → full reset
 
             /* ===============================
