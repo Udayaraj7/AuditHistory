@@ -68,9 +68,23 @@ modules:
       - project1.zip
       name: project1
       target-path: resources/
+    - artifacts:
+      - orderproject.zip
+      name: orderproject
+      target-path: resources/
 - name: project1
   type: html5
   path: app/project1
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: orderproject
+  type: html5
+  path: app/orderproject
   build-parameters:
     build-result: dist
     builder: custom

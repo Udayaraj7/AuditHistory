@@ -91,7 +91,11 @@
       }
     },
     "resources": {
-      "css": []
+      "css": [
+      {
+        "uri": "css/style.css"
+      }
+    ]
     },
     "routing": {
       "config": {},
@@ -148,15 +152,24 @@
                       "press": "project1.ext.controller.History.onHistoryClick",
                       "visible": true,
                       "enabled": true,
-                      "text": "History",
                       "position": {
                         "placement": "Before"
-                      }
+                      },
+                      "text": "History"
                     }
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController#project1::CustomerObjectPage": {
+            "controllerName": "project1.ext.controller.CustomerObject"
           }
         }
       }
