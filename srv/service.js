@@ -43,6 +43,7 @@ module.exports = cds.service.impl(function (srv) {
         if (!req._oldCustomerData) return;
 
         console.log("after-----------------------------------")
+        
      //full record
         await INSERT.into(AuditHistoryCustomer).entries({
             customerId: req._oldCustomerData.customerId,

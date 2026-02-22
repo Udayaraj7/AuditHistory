@@ -26,7 +26,35 @@ entity Customer {
         on CustomerToOrders.OrdersToCustomer = $self;
     CustomerToAuditHistory : Composition of many AuditHistory
         on CustomerToAuditHistory.AuditHistoryToCustomer = $self;
+
+        
+    CustomerToHobbies : Composition of many CustomerHobby
+        on CustomerToHobbies.Customer = $self;
 }
+
+entity ZHobby {
+    key HobbyID   : String(10);
+    HobbyName     : String(50);
+}
+
+entity CustomerHobby {
+    key Customer : Association to Customer;
+    key Hobby    : Association to ZHobby;
+}
+
+
+entity msgValueHelp{
+    key id : String(10);
+    value   : String(20);
+}
+
+entity valuefitValueHelp{
+    key id : String(10);
+    value   : String(20);
+}
+
+
+
 
 
 entity AuditHistoryCustomer : cuid, managed {
@@ -47,6 +75,9 @@ entity Orders {
                         orderDate        : DateTime;
                                 orderAmount      : Integer;
                                         status           : String default 'Pending';
+
+                                        msgValue : String(200);
+                                        valueFitValue : String(10);
         OrdersToCustomer : Association to one Customer
                                on OrdersToCustomer.customerId = customerId;
         OrderToPayment   : Composition of one Payment

@@ -1,0 +1,31 @@
+
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <VBox id="idWrapperVBox">
+
+     <!-- Display Mode -->
+        <Text id="_IDGenText"
+            visible="{= ${IsActiveEntity} }"
+            text="{msgValue}" />
+
+        <MultiComboBox
+            id="cbStatus"
+            width="100%"
+            visible="{= !${IsActiveEntity} }"
+            items="{
+                path: '/msgValueHelp',
+                templateShareable: false
+            }"
+            selectedKeys="{
+                path: 'msgValue',
+                targetType: 'any',
+                formatter: 'handler.formatStringToKeys'
+            }"
+            selectionFinish="handler.onSelectionFinish"
+            selectionChange="handler.onSelectionChange"
+            core:require="{handler: 'project1/ext/fragment/Msgfragment'}">
+            <core:Item id="_IDGenItem" key="{value}" text="{value}" />
+        </MultiComboBox>
+    </VBox>
+</core:FragmentDefinition>

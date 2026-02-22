@@ -3,10 +3,13 @@
     xmlns="sap.m"
       xmlns:form="sap.ui.layout.form"
     controllerName="orderproject.controller.View1"
+xmlns:upload="sap.m.upload"
+  xmlns:plugins="sap.m.plugins"  
 >
     <Wizard
         id="customerWizard"
         showNextButton="false"
+        renderMode="Page"
     >
         <!-- STEP 1: CUSTOMER -->
         <WizardStep
@@ -174,6 +177,24 @@
                 value="{wizard>/payment/amount}"
                 width="250px"
                 liveChange="onPaymentFieldChange" />
+ 
+
+             <!-- Attachments -->
+           <Label text="Attachments" />
+
+<upload:UploadSet
+    id="uploadSet"
+    uploadUrl="/upload"
+    multiple="true"
+    instantUpload="false"
+    beforeItemAdded="onBeforeItemAdded"
+    uploadCompleted="onUploadCompleted">
+
+</upload:UploadSet>
+
+
+
+
 
         </form:SimpleForm>
 

@@ -122,6 +122,11 @@
 					"pattern": "Customer({key}):?query:",
 					"name": "CustomerObjectPage",
 					"target": "CustomerObjectPage"
+				},
+				{
+					"name": "Customer_CustomerToOrdersObjectPage",
+					"pattern": "Customer({key})/CustomerToOrders({CustomerToOrdersKey}):?query:",
+					"target": "Customer_CustomerToOrdersObjectPage"
 				}
 			],
 			"targets": {
@@ -171,8 +176,66 @@
 											"text": "History"
 										}
 									}
+								},
+								"CustomerToOrders/@com.sap.vocabularies.UI.v1.LineItem#Orders": {
+									"columns": {
+										"Msgfragment": {
+											"header": "Msg",
+											"width": "20%",
+											"position": {
+												"placement": "After"
+											},
+											"template": "project1.ext.fragment.Msgfragment"
+										}
+									}
+								}
+							},
+							"content": {
+								"body": {
+									"sections": {
+										"AuditHistory": {
+											"template": "project1.ext.fragment.AuditHistory",
+											"position": {
+												"placement": "After",
+												"anchor": "GeneratedFacet1"
+											},
+											"title": "Customer Audit History"
+										}
+									}
+								},
+								"header": {
+									"actions": {
+										"Action1": {
+											"press": "project1.ext.controller.PdfHandler.pdfmethod",
+											"visible": true,
+											"enabled": true,
+											"text": "save as pdf",
+											"position": {
+												"placement": "Before",
+												"anchor": "EditAction"
+											}
+										}
+									}
+								}
+							},
+							"navigation": {
+								"CustomerToOrders": {
+									"detail": {
+										"route": "Customer_CustomerToOrdersObjectPage"
+									}
 								}
 							}
+						}
+					}
+				},
+				"Customer_CustomerToOrdersObjectPage": {
+					"type": "Component",
+					"id": "Customer_CustomerToOrdersObjectPage",
+					"name": "sap.fe.templates.ObjectPage",
+					"options": {
+						"settings": {
+							"navigation": {},
+							"contextPath": "/Customer/CustomerToOrders"
 						}
 					}
 				}
@@ -195,6 +258,6 @@
 	},
 	"sap.cloud": {
 		"public": true,
-		"service": "app1"
+		"service": "project1.service"
 	}
 }

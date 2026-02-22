@@ -1,0 +1,162 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+
+    <VBox
+        id="auditRootVBox"
+        class="sapUiSmallMargin"
+        core:require="{ handler: 'project1/ext/fragment/AuditHistory'}">
+
+        <l:Grid
+            id="auditGrid"
+            defaultSpan="L4 M6 S12"
+            vSpacing="1"
+            hSpacing="2">
+
+            <!-- Customer ID -->
+            <VBox id="customerIdVBox">
+                <Label id="customerIdLabel" text="Customer ID:"/>
+                <HBox id="customerIdHBox" alignItems="Center">
+                    <Text id="customerIdText" text="{customerId}"/>
+                </HBox>
+            </VBox>
+
+            <!-- Customer Name -->
+            <VBox id="customerNameVBox">
+                <Label id="customerNameLabel" text="Customer Name:"/>
+
+                <!-- Display mode -->
+                <HBox
+                    id="customerNameDisplayHBox"
+                    alignItems="Center"
+                    visible="{= ${IsActiveEntity} }">
+                    <Text id="customerNameText" text="{customerName}" />
+                    <Button
+                        id="customerNameHistoryBtn"
+                        icon="sap-icon://message-information"
+                        type="Transparent"
+                        tooltip="View Name History"
+                        press="handler.onShowHistory">
+                        <customData>
+                            <core:CustomData key="field" value="customerName"/>
+                        </customData>
+                    </Button>
+                </HBox>
+
+                <!-- Edit mode -->
+                <HBox
+                    id="customerNameEditHBox"
+                    alignItems="Center"
+                    visible="{= !${IsActiveEntity} }">
+                    <Input id="customerNameInput" value="{customerName}" />
+                </HBox>
+            </VBox>
+
+            <!-- Email -->
+            <VBox id="emailVBox">
+                <Label id="emailLabel" text="Email:"/>
+
+                <!-- Display mode -->
+                <HBox
+                    id="emailDisplayHBox"
+                    alignItems="Center"
+                    visible="{= ${IsActiveEntity} }">
+                    <Text id="emailText" text="{email}" />
+                    <Button
+                        id="emailHistoryBtn"
+                        icon="sap-icon://message-information"
+                        type="Transparent"
+                        tooltip="View Email History"
+                        press="handler.onShowHistory">
+                        <customData>
+                            <core:CustomData key="field" value="email"/>
+                        </customData>
+                    </Button>
+                </HBox>
+
+                <!-- Edit mode -->
+                <HBox
+                    id="emailEditHBox"
+                    alignItems="Center"
+                    visible="{= !${IsActiveEntity} }">
+                    <Input
+                        id="emailInput"
+                        value="{email}"
+                        type="Email"/>
+                </HBox>
+            </VBox>
+
+            <!-- Phone Number -->
+            <VBox id="phoneVBox">
+                <Label id="phoneLabel" text="Phone Number:"/>
+
+                <!-- Display mode -->
+                <HBox
+                    id="phoneDisplayHBox"
+                    alignItems="Center"
+                    visible="{= ${IsActiveEntity} }">
+                    <Text id="phoneText" text="{phoneNumber}" />
+                    <Button
+                        id="phoneHistoryBtn"
+                        icon="sap-icon://message-information"
+                        type="Transparent"
+                        tooltip="View Phone History"
+                        press="handler.onShowHistory">
+                        <customData>
+                            <core:CustomData key="field" value="phoneNumber"/>
+                        </customData>
+                    </Button>
+                </HBox>
+
+                <!-- Edit mode -->
+                <HBox
+                    id="phoneEditHBox"
+                    alignItems="Center"
+                    visible="{= !${IsActiveEntity} }">
+                    <Input
+                        id="phoneInput"
+                        value="{phoneNumber}"
+                        type="Tel"
+                        maxLength="10"/>
+                </HBox>
+            </VBox>
+
+            <!-- Address -->
+            <VBox id="addressVBox">
+                <Label id="addressLabel" text="Address:"/>
+
+                <!-- Display mode -->
+                <HBox
+                    id="addressDisplayHBox"
+                    alignItems="Center"
+                    visible="{= ${IsActiveEntity} }">
+                    <Text
+                        id="addressText"
+                        text="{address}"
+                        wrapping="true"/>
+                    <Button
+                        id="addressHistoryBtn"
+                        icon="sap-icon://message-information"
+                        type="Transparent"
+                        tooltip="View Address History"
+                        press="handler.onShowHistory">
+                        <customData>
+                            <core:CustomData key="field" value="address"/>
+                        </customData>
+                    </Button>
+                </HBox>
+
+                <!-- Edit mode -->
+                <HBox
+                    id="addressEditHBox"
+                    alignItems="Center"
+                    visible="{= !${IsActiveEntity} }">
+                    <Input id="addressInput" value="{address}" />
+                </HBox>
+            </VBox>
+
+        </l:Grid>
+    </VBox>
+
+</core:FragmentDefinition>
