@@ -8,33 +8,37 @@ using {
 
 entity Customer {
 
-    @readonly
-    key customerId : String;
-    customerNo : Integer;
-    @mandatory
-    customerName : String;
-    @mandatory
-    email : String;
-    @mandatory
-    @assert.format: '^[0-9]{10}$'
-    phoneNumber : String;
-    @mandatory
-    address : String;
-    CustomerToAuditHistoryCustomer : Composition of many AuditHistoryCustomer
-        on CustomerToAuditHistoryCustomer.AuditHistoryCustomerToCustomer = $self;
-    CustomerToOrders : Composition of many Orders
-        on CustomerToOrders.OrdersToCustomer = $self;
-    CustomerToAuditHistory : Composition of many AuditHistory
-        on CustomerToAuditHistory.AuditHistoryToCustomer = $self;
+        @readonly
+    key customerId                     : String;
+        customerNo                     : Integer;
 
-        
-    CustomerToHobbies : Composition of many CustomerHobby
-        on CustomerToHobbies.Customer = $self;
+        @mandatory
+        customerName                   : String;
+
+        @mandatory
+        email                          : String;
+
+        @mandatory
+        @assert.format: '^[0-9]{10}$'
+        phoneNumber                    : String;
+
+        @mandatory
+        address                        : String;
+        CustomerToAuditHistoryCustomer : Composition of many AuditHistoryCustomer
+                                             on CustomerToAuditHistoryCustomer.AuditHistoryCustomerToCustomer = $self;
+        CustomerToOrders               : Composition of many Orders
+                                             on CustomerToOrders.OrdersToCustomer = $self;
+        CustomerToAuditHistory         : Composition of many AuditHistory
+                                             on CustomerToAuditHistory.AuditHistoryToCustomer = $self;
+
+
+        CustomerToHobbies              : Composition of many CustomerHobby
+                                             on CustomerToHobbies.Customer = $self;
 }
 
 entity ZHobby {
     key HobbyID   : String(10);
-    HobbyName     : String(50);
+        HobbyName : String(50);
 }
 
 entity CustomerHobby {
@@ -43,18 +47,15 @@ entity CustomerHobby {
 }
 
 
-entity msgValueHelp{
-    key id : String(10);
-    value   : String(20);
+entity msgValueHelp {
+    key id    : String(10);
+        value : String(20);
 }
 
-entity valuefitValueHelp{
-    key id : String(10);
-    value   : String(20);
+entity valuefitValueHelp {
+    key id    : String(10);
+        value : String(20);
 }
-
-
-
 
 
 entity AuditHistoryCustomer : cuid, managed {
@@ -70,14 +71,14 @@ entity AuditHistoryCustomer : cuid, managed {
 
 entity Orders {
         @readonly
-            key customerId       : String;
-                key orderId          : String;
-                        orderDate        : DateTime;
-                                orderAmount      : Integer;
-                                        status           : String default 'Pending';
+    key customerId       : String;
+    key orderId          : String;
+        orderDate        : DateTime;
+        orderAmount      : Integer;
+        status           : String default 'Pending';
 
-                                        msgValue : String(200);
-                                        valueFitValue : String(10);
+        msgValue         : String(2000);
+        valueFitValue    : String(10);
         OrdersToCustomer : Association to one Customer
                                on OrdersToCustomer.customerId = customerId;
         OrderToPayment   : Composition of one Payment
@@ -99,12 +100,10 @@ entity Payment {
 
 
 entity AuditHistory : cuid, managed {
-    key customerId : String;
-        fieldName:String;
-        value:String;
+    key customerId             : String;
+        fieldName              : String;
+        value                  : String;
         AuditHistoryToCustomer : Association to one Customer
-                                             on AuditHistoryToCustomer.customerId = customerId;
+                                     on AuditHistoryToCustomer.customerId = customerId;
 
 }
-
-

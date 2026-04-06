@@ -183,9 +183,11 @@
 											"header": "Msg",
 											"width": "20%",
 											"position": {
-												"placement": "After"
+												"placement": "After",
+												"anchor": "DataField::orderId"
 											},
-											"template": "project1.ext.fragment.Msgfragment"
+											"template": "project1.ext.fragment.Msgfragment",
+											"importance": "High"
 										}
 									}
 								}
@@ -258,6 +260,6 @@
 	},
 	"sap.cloud": {
 		"public": true,
-		"service": "project1.service"
+		"service": "app1"
 	}
 }
